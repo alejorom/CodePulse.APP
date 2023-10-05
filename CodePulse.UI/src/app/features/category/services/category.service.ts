@@ -11,6 +11,6 @@ export class CategoryService {
   constructor(private http: HttpClient) { }
 
   addCategory(model:AddCategoryRequest) : Observable<void> {
-    return this.http.post<void>('https://localhost:7181/api//categories', model);
+    return this.http.post<void>('https://localhost:7181/api/categories', model);
   }
 }
