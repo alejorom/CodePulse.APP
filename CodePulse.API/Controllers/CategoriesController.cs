@@ -1,6 +1,7 @@
 ﻿using CodePulse.API.Data;
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTO;
+using CodePulse.API.Repositories.Implementation;
 using CodePulse.API.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,7 @@ namespace CodePulse.API.Controllers
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
         {
             // Map DTO to Domain Model
-             var category = new Category
+            var category = new Category
             {
                 Name = request.Name,
                 UrlHandle = request.UrlHandle
@@ -38,5 +39,26 @@ namespace CodePulse.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var caterogies = await _categoryRepository.GetAllAsync();
+
+            // Map Domain model to DTO
+            var response = new List<CategoryDto>();
+            foreach (var category in caterogies)
+            {
+                response.Add(new CategoryDto
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    UrlHandle = category.UrlHandle
+                });
+            }
+
+            return Ok(response);
+        }
+
     }
 }
