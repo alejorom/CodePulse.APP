@@ -1,6 +1,8 @@
 ﻿using CodePulse.API.Data;
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodePulse.API.Repositories.Implementation
@@ -43,6 +45,20 @@ namespace CodePulse.API.Repositories.Implementation
             }
 
             return null;
+        }
+
+        public async Task<Category?> DeleteAsync(Guid id)
+        {
+            var existingCategory = await _dbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingCategory is null)
+            {
+                return null;
+            }
+
+            _dbContext.Categories.Remove(existingCategory);
+            await _dbContext.SaveChangesAsync();
+            return existingCategory;
         }
     }
 }
