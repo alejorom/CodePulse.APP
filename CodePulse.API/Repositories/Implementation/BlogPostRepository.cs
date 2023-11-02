@@ -20,5 +20,10 @@ namespace CodePulse.API.Repositories.Implementation
             await _dbContext.SaveChangesAsync();
             return blogPost;
         }
+
+        public async Task<IEnumerable<BlogPost>> GetAllAsync()
+        {
+            return await _dbContext.BlogPosts.ToListAsync();
+        }
     }
 }
