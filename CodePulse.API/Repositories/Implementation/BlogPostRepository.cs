@@ -30,5 +30,21 @@ namespace CodePulse.API.Repositories.Implementation
         {
             return await _dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id); 
         }
+
+        public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
+        {
+            var existingBlogPost = await _dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == blogPost.Id);
+
+            if (existingBlogPost == null) return null;
+
+            // Update BlogPost
+            _dbContext.Entry(existingBlogPost).CurrentValues.SetValues(blogPost);
+
+            // Update Categories
+            existingBlogPost.Categories = blogPost.Categories;
+            await _dbContext.SaveChangesAsync();
+
+            return blogPost;
+        }
     }
 }
