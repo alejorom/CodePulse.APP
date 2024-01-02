@@ -1,5 +1,6 @@
 ﻿using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTO;
+using CodePulse.API.Repositories.Implementation;
 using CodePulse.API.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,31 @@ namespace CodePulse.API.Controllers
         public ImagesController(IImageRepository imageRepository)
         {
             this._imageRepository = imageRepository;
+        }
+
+        // GET: {apibaseURL}/api/Images
+        [HttpGet]
+        public async Task<IActionResult> GetAllImages()
+        {
+            // call image repository to get all images
+            var images = await _imageRepository.GetAll();
+
+            // Convert Domain model to DTO
+            var response = new List<BlogImageDto>();
+            foreach (var image in images)
+            {
+                response.Add(new BlogImageDto
+                {
+                    Id = image.Id,
+                    Title = image.Title,
+                    DateCreated = image.DateCreated,
+                    FileExtension = image.FileExtension,
+                    FileName = image.FileName,
+                    Url = image.Url
+                });
+            }
+
+            return Ok(response);
         }
 
         // POST: {apibaseurl}/api/images
