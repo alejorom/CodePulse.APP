@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LoginRequest } from '../models/login-request.model';
 import { LoginResponse } from '../models/login-response.model';
-import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,6 +11,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 
+  $user = new BehaviorSubject<User | undefined>(undefined);
+  
   constructor(private http: HttpClient) { }
 
   login(request: LoginRequest): Observable<LoginResponse> {
@@ -18,5 +21,6 @@ export class AuthService {
       password: request.password
     });
   }
-  
+
+ 
 }
