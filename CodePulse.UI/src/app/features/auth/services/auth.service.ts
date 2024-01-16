@@ -22,5 +22,14 @@ export class AuthService {
     });
   }
 
- 
+  setUser(user: User): void {
+    this.$user.next(user);
+    localStorage.setItem('user-email', user.email);
+    localStorage.setItem('user-roles', user.roles.join(','));
+  }
+
+  user() : Observable<User | undefined> {
+    return this.$user.asObservable();
+  }
+  
 }
